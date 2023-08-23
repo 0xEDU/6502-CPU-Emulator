@@ -19,6 +19,11 @@ struct Mem {
 	void initialize() {
 		std::memset(data, 0, sizeof(data));
 	}
+
+	Byte operator[](u32 address) const {
+		// TODO: Assert that address < MAX_MEM
+		return data[address];
+	}
 };
 
 struct CPU {
@@ -26,7 +31,7 @@ struct CPU {
 	Word SP; // Stack Pointer
 	
 	/* Registers */
-	Byte A, X, Y;
+	Byte A, X, Y; // Accumulator, X and Y
 
 	/* Status flags */
 	Byte C : 1; // Carry flag
@@ -46,6 +51,20 @@ struct CPU {
 		memory.initialize();
 	}
 
+	Byte fetchByte(u32 &cycles, Mem &memory) {
+		Byte data = memory[PC];
+		PC++;
+		cycles--;
+		return data;
+	}
+
+	void execute(u32 cycles, Mem &memory) {
+		while (cycles > 0) {
+			Byte instruction = fetchByte(cycles, memory);
+			(void) instruction;
+		}
+
+	}
 };
 
 int main() {
@@ -53,5 +72,6 @@ int main() {
 	CPU cpu;
 
 	cpu.reset(mem);
+	cpu.execute(2, mem);
 	return 0;
 }
