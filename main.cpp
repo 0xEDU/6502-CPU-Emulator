@@ -21,7 +21,14 @@ struct Mem {
 		std::memset(data, 0, sizeof(data));
 	}
 
+	// Read 1 byte
 	Byte operator[](u32 address) const {
+		// TODO: Assert that address < MAX_MEM
+		return data[address];
+	}
+
+	// Write 1 byte
+	Byte &operator[](u32 address) {
 		// TODO: Assert that address < MAX_MEM
 		return data[address];
 	}
@@ -90,6 +97,10 @@ int main() {
 	CPU cpu;
 
 	cpu.reset(mem);
+	// start - inline a small program
+	mem[0xFFFC] = CPU::INS_LDA_IM;
+	mem[0xFFFD] = 0x42;
+	// end - inline a small program
 	cpu.execute(2, mem);
 	return 0;
 }
