@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 
 // References:
 // https://www.youtube.com/playlist?list=PLLwK93hM93Z13TRzPx9JqTIn33feefl37
@@ -58,12 +59,29 @@ struct CPU {
 		return data;
 	}
 
+	// opcodes
+	static constexpr Byte
+	INS_LDA_IM = 0xA9;
+
 	void execute(u32 cycles, Mem &memory) {
 		while (cycles > 0) {
 			Byte instruction = fetchByte(cycles, memory);
 			(void) instruction;
+			switch (instruction) {
+				case INS_LDA_IM:
+				{
+					Byte value = fetchByte(cycles, memory);
+					A = value;
+					Z = (A == 0);
+					N = (A & 0b10000000) > 0;
+				} break ;
+				default:
+				{
+					std::cout << "Instruction not handled "
+						<< instruction << std::endl;
+				} break ;
+			}
 		}
-
 	}
 };
 
