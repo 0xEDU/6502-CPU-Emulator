@@ -32,6 +32,14 @@ struct Mem {
 		// TODO: Assert that address < MAX_MEM
 		return data[address];
 	}
+
+	// Write 2 bytes
+	void writeWord(Word value, u32 address, u32 &cycles) {
+		data[address]     = value & 0xFF;
+		data[address + 1] = (value >> 8);
+		cycles -= 2;
+	}
+
 };
 
 struct CPU {
@@ -66,17 +74,28 @@ struct CPU {
 		return data;
 	}
 
+	Word fetchWord(u32 &cycles, Mem &memory) {
+		// 6592 is little endian
+		Word data = memory[PC];
+		PC++;
+		data |= (memory[PC] << 8);
+		PC++;
+		cycles -= 2;
+		return data;
+	}
+
 	Byte readByte(u32 &cycles, Byte address, Mem &memory) {
 		Byte data = memory[address];
 		cycles--;
 		return data;
 	}
 
-	// opcodes
+	/* opcodes */
 	static constexpr Byte
 	INS_LDA_IM = 0xA9,
 	INS_LDA_ZP = 0xA5,
-	INS_LDA_ZPX = 0x85;
+	INS_LDA_ZPX = 0x85,
+	INS_JSR = 0x20;
 
 	void setLDAStatus() {
 		Z = (A == 0);
@@ -86,7 +105,6 @@ struct CPU {
 	void execute(u32 cycles, Mem &memory) {
 		while (cycles > 0) {
 			Byte instruction = fetchByte(cycles, memory);
-			(void) instruction;
 			switch (instruction) {
 				case INS_LDA_IM:
 				{
@@ -109,6 +127,14 @@ struct CPU {
 					A = readByte(cycles, zeroPageAddress, memory);
 					setLDAStatus();
 				} break ;
+				case INS_JSR:
+				{
+					Word subAddr = fetchWord(cycles, memory);
+					memory.writeWord(PC - 1, SP, cycles);
+					SP++;
+					PC = subAddr;
+					cycles--;
+				} break ;
 				default:
 				{
 					std::cout << "Instruction not handled "
@@ -125,10 +151,12 @@ int main() {
 
 	cpu.reset(mem);
 	// start - inline a small program
-	mem[0xFFFC] = CPU::INS_LDA_ZP;
+	mem[0xFFFC] = CPU::INS_JSR;
 	mem[0xFFFD] = 0x42;
-	mem[0x0042] = 0x84;
+	mem[0xFFFE] = 0x42;
+	mem[0x4242] = CPU::INS_LDA_IM;
+	mem[0x4243] = 0x84;
 	// end - inline a small program
-	cpu.execute(3, mem);
+	cpu.execute(9, mem);
 	return 0;
 }
