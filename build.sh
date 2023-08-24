@@ -1,3 +1,9 @@
 #!/bin/bash
 
-c++ -Wall -Wextra -Werror -g3 -I./includes/ src/main.cpp -o 6502cpu
+DIR=build
+
+mkdir -p $DIR
+echo -e "Building..."
+cmake --build $DIR
+echo -e "Running make..."
+make --no-print-dir -C $DIR -j4
