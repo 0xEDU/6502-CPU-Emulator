@@ -95,10 +95,10 @@ struct CPU {
 
 	/* opcodes */
 	static constexpr Byte
-	INS_LDA_IM = 0xA9,
-	INS_LDA_ZP = 0xA5,
-	INS_LDA_ZPX = 0x85,
-	INS_JSR = 0x20;
+	INS_LDA_IM	= 0xA9,
+	INS_LDA_ZP	= 0xA5,
+	INS_LDA_ZPX	= 0xB5,
+	INS_JSR		= 0x20;
 
 	void setLDAStatus() {
 		Z = (A == 0);
