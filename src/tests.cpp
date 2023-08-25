@@ -43,6 +43,22 @@ TEST_F(M6502Test1, LDAZeroPageCanLoadAValueIntoTheARegister) {
     EXPECT_EQ(cpu.A, 0x37);
 }
 
+TEST_F(M6502Test1, LDAZeroPageXCanLoadAValueIntoTheARegister) {
+    // Given:
+    cpu.X = 5;
+    // start - inline a small program
+    mem[0xFFFC] = CPU::INS_LDA_ZPX;
+    mem[0xFFFD] = 0x42;
+    mem[0x0047] = 0x37;
+    // end - inline a small program
+
+    // When:
+    cpu.execute(4, mem);
+
+    // Then:
+    EXPECT_EQ(cpu.A, 0x37);
+}
+
 #if 0
 int main() {
 
