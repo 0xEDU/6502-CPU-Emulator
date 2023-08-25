@@ -126,7 +126,6 @@ struct CPU {
 					Byte zeroPageAddress = fetchByte(cycles, memory);
 					A = readByte(cycles, zeroPageAddress, memory);
 					zeroPageAddress += X; // This might overflow!
-					cycles--;
 					A = readByte(cycles, zeroPageAddress, memory);
 					setLDAStatus();
 				} break ;
