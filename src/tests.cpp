@@ -59,6 +59,30 @@ TEST_F(M6502Test1, LDAZeroPageXCanLoadAValueIntoTheARegister) {
     EXPECT_EQ(cpu.A, 0x37);
 }
 
+TEST_F(M6502Test1, LDAZeroPageXCanLoadAValueIntoTheARegisterWhenItWraps) {
+    // Given:
+    cpu.X = 0xFF;
+    // start - inline a small program
+    mem[0xFFFC] = CPU::INS_LDA_ZPX;
+    mem[0xFFFD] = 0x80;
+    mem[0x007F] = 0x37;
+    // end - inline a small program
+
+    // When:
+    CPU cpuCopy = cpu;
+    cpu.execute(4, mem);
+
+    // Then:
+    EXPECT_EQ(cpu.A, 0x37);
+    EXPECT_FALSE(cpu.Z);
+    EXPECT_FALSE(cpu.N);
+    EXPECT_EQ(cpu.C, cpuCopy.C);
+    EXPECT_EQ(cpu.I, cpuCopy.I);
+    EXPECT_EQ(cpu.D, cpuCopy.D);
+    EXPECT_EQ(cpu.B, cpuCopy.B);
+    EXPECT_EQ(cpu.V, cpuCopy.V);
+}
+
 #if 0
 int main() {
 
