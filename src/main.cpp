@@ -1,17 +1,9 @@
-#include "../includes/6502cpu.hpp"
+#include <cstdio>
 
-int main() {
-	Mem mem;
-	CPU cpu;
+#include <gtest/gtest.h>
 
-	cpu.reset(mem);
-	// start - inline a small program
-	mem[0xFFFC] = CPU::INS_JSR;
-	mem[0xFFFD] = 0x42;
-	mem[0xFFFE] = 0x42;
-	mem[0x4242] = CPU::INS_LDA_IM;
-	mem[0x4243] = 0x84;
-	// end - inline a small program
-	cpu.execute(9, mem);
-	return 0;
+GTEST_API_ int main(int argc, char **argv) {
+  printf("Running main() from %s\n", __FILE__);
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

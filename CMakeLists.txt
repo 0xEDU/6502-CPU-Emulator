@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(-Wall -Wextra -Werror)
 
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES
+        src/main.cpp
+        src/tests.cpp)
 
 include_directories(includes)
 include(FetchContent)
@@ -17,4 +19,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+enable_testing()
+
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+target_link_libraries(
+  ${PROJECT_NAME}
+  GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})
