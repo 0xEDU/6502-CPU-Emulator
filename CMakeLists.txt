@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 project(6502cpu)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,7 +12,6 @@ add_compile_options(-Wall -Wextra -Werror)
 set(SOURCE_FILES
         src/main.cpp
         src/tests.cpp)
-
 include_directories(includes)
 include(FetchContent)
 FetchContent_Declare(
