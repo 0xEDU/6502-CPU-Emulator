@@ -1,2 +1,4 @@
 6502cpu
 build/
+compile_commands.json
+.cache/
