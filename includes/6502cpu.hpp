@@ -64,7 +64,7 @@ struct CPU {
 	// Initialize internal values
 	void reset(Mem &memory) {
 		PC = 0xFFFC;
-		SP = 0x0100;
+		SP = (Byte) 0x0100;
 		C = Z = I = D = B = V = N = 0; // This is ugly
 		A = X = Y = 0;
 		memory.initialize();
@@ -147,6 +147,5 @@ struct CPU {
 		}
 	}
 };
-
 
 #endif // !_6502cpu_HPP
