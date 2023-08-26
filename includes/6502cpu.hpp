@@ -15,6 +15,7 @@ using Byte = unsigned char; // 1 byte / 8 bits
 using Word = unsigned short; // 4 byte / 16 bits
 
 using u32 = unsigned int;
+using s32 = signed int;
 
 struct Mem {
 	static constexpr u32 MAX_MEM = 1024 * 64;
@@ -105,7 +106,8 @@ struct CPU {
 		N = (A & 0b10000000) > 0;
 	}
 
-	void execute(u32 cycles, Mem &memory) {
+	s32 execute(u32 cycles, Mem &memory) {
+		const u32 cyclesRequested = cycles;
 		while (cycles > 0) {
 			Byte instruction = fetchByte(cycles, memory);
 			switch (instruction) {
@@ -133,7 +135,7 @@ struct CPU {
 				{
 					Word subAddr = fetchWord(cycles, memory);
 					memory.writeWord(PC - 1, SP, cycles);
-					SP++;
+					SP += 2;
 					PC = subAddr;
 					cycles--;
 				} break ;
@@ -144,6 +146,8 @@ struct CPU {
 				} break ;
 			}
 		}
+		const s32 cyclesUsed = cyclesRequested - cycles;
+		return cyclesUsed;
 	}
 };
 
