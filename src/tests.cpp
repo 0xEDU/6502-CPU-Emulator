@@ -110,10 +110,3 @@ TEST_F(M6502Test1, LDAZeroPageXCanLoadAValueIntoTheARegisterWhenItWraps) {
     EXPECT_EQ(cpu.B, cpuCopy.B);
     EXPECT_EQ(cpu.V, cpuCopy.V);
 }
-
-#if 0
-int main() {
-
-    return 0;
-}
-#endif
