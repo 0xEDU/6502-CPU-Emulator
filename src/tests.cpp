@@ -23,10 +23,11 @@ TEST_F(M6502Test1, LDAImmediateCanLoadAValueIntoTheARegister) {
 
     // When:
     CPU cpuCopy = cpu;
-    cpu.execute(2, mem);
+    s32 cyclesUsed = cpu.execute(2, mem);
 
     // Then:
     EXPECT_EQ(cpu.A, 0x84);
+    EXPECT_EQ(cyclesUsed, 2);
     EXPECT_FALSE(cpu.Z);
     EXPECT_TRUE(cpu.N);
     EXPECT_EQ(cpu.C, cpuCopy.C);
@@ -46,10 +47,11 @@ TEST_F(M6502Test1, LDAZeroPageCanLoadAValueIntoTheARegister) {
 
     // When:
     CPU cpuCopy = cpu;
-    cpu.execute(3, mem);
+    s32 cyclesUsed = cpu.execute(3, mem);
 
     // Then:
     EXPECT_EQ(cpu.A, 0x37);
+    EXPECT_EQ(cyclesUsed, 3);
     EXPECT_FALSE(cpu.Z);
     EXPECT_FALSE(cpu.N);
     EXPECT_EQ(cpu.C, cpuCopy.C);
@@ -70,10 +72,11 @@ TEST_F(M6502Test1, LDAZeroPageXCanLoadAValueIntoTheARegister) {
 
     // When:
     CPU cpuCopy = cpu;
-    cpu.execute(4, mem);
+    s32 cyclesUsed = cpu.execute(4, mem);
 
     // Then:
     EXPECT_EQ(cpu.A, 0x37);
+    EXPECT_EQ(cyclesUsed, 4);
     EXPECT_FALSE(cpu.Z);
     EXPECT_FALSE(cpu.N);
     EXPECT_EQ(cpu.C, cpuCopy.C);
@@ -94,10 +97,11 @@ TEST_F(M6502Test1, LDAZeroPageXCanLoadAValueIntoTheARegisterWhenItWraps) {
 
     // When:
     CPU cpuCopy = cpu;
-    cpu.execute(4, mem);
+    s32 cyclesUsed = cpu.execute(4, mem);
 
     // Then:
     EXPECT_EQ(cpu.A, 0x37);
+    EXPECT_EQ(cyclesUsed, 4);
     EXPECT_FALSE(cpu.Z);
     EXPECT_FALSE(cpu.N);
     EXPECT_EQ(cpu.C, cpuCopy.C);
